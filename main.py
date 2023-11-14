@@ -59,7 +59,6 @@ if __name__ == '__main__':
         prog='jobinja_data_crawler',
         description='Crawl Companies data for each url')
     parser.add_argument('-s', '--scope', help="end of page you want to get crawl, default is 2750")
-    parser.add_argument('-f', '--filename', help="export file name, default is jobinja")
     args = parser.parse_args()
     if args.scope:
         print(run(get_company_details(run(get_companies(args.scope)))))
