@@ -7,12 +7,12 @@ from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 
 
-async def get_companies(scope=2750):
+async def get_companies(start_scope=1, end_scope=2750):
     try:
         ua = UserAgent()
         headers = {'User-Agent': ua.chrome}
         summary = []
-        for i in range(scope):
+        for i in range(start_scope, end_scope):
             base_url = f'https://jobinja.ir/company/list/کامپیوتر-فناوری-اطلاعات-و-اینترنت?page={i}'
             async with ClientSession(headers=headers) as session:
                 async with session.get(base_url) as response:
@@ -20,6 +20,7 @@ async def get_companies(scope=2750):
                     a_tags = soup.find_all("a", {"class": "c-companyOverview"}, href=True)
                     for a in a_tags:
                         summary.append(a['href'])
+        print(f"\33[34mjobinja companies urls has been taken")
         return summary
     except Exception as exception:
         return f"\33[31m{exception}"
