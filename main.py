@@ -7,7 +7,8 @@ from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 
 
-async def get_companies(start_scope=1, end_scope=2750):
+async def get_companies(start_scope=1, end_scope=11):
+    base_url = None
     try:
         ua = UserAgent()
         headers = {'User-Agent': ua.chrome}
@@ -23,10 +24,11 @@ async def get_companies(start_scope=1, end_scope=2750):
         print(f"\33[34mjobinja companies urls has been taken")
         return summary
     except Exception as exception:
-        return f"\33[31m{exception}"
+        print(f"\33[31m{exception} for url: {base_url}")
 
 
 async def get_company_details(company_urls, export_file_name="jobinja"):
+    company_url = None
     try:
         fields = ['company_name', 'date_of_establishment', 'activity', 'number_of_persons', 'website']
         summary = []
@@ -42,13 +44,14 @@ async def get_company_details(company_urls, export_file_name="jobinja"):
                         item = [x.strip(' ') for x in item]
                         item = [elem for elem in item if elem.strip()]
                         summary.append(item)
+                        print(f"\33[34m{company_url} crawled")
         with open(f'./{export_file_name}.csv', 'w+', encoding='utf-8', newline='') as csv_file:
             write = writer(csv_file, quoting=QUOTE_ALL, delimiter=',')
             write.writerow(fields)
             write.writerows(summary)
         return f"\33[32mJobinja crawling is done, use the ./{export_file_name}.csv"
     except Exception as exception:
-        return f"\33[31m{exception}"
+        print(f"\33[31m{exception} for url: {company_url}")
 
 
 if __name__ == '__main__':
